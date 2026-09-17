@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  # ── Redis (bus de eventos para coreografía) ──────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: novabank-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  # ── Account Service :8001 ─────────────────────────────────────────
+  account:
+    build: ./services/account
+    container_name: novabank-account
+    ports:
+      - "8001:8001"
+    env_file: .env
+    environment:
+      PORT: 8001
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ── Risk Service :8002 ────────────────────────────────────────────
+  risk:
+    build: ./services/risk
+    container_name: novabank-risk
+    ports:
+      - "8002:8002"
+    env_file: .env
+    environment:
+      PORT: 8002
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ── Clearing Service :8003 ────────────────────────────────────────
+  clearing:
+    build: ./services/clearing
+    container_name: novabank-clearing
+    ports:
+      - "8003:8003"
+    env_file: .env
+    environment:
+      PORT: 8003
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # ── API Gateway :8000 ─────────────────────────────────────────────
+  gateway:
+    build: ./gateway
+    container_name: novabank-gateway
+    ports:
+      - "8000:8000"
+    env_file: .env
+    environment:
+      PORT: 8000
+    depends_on:
+      - account
+      - risk
+      - clearing
+      - redis
+    restart: unless-stopped
