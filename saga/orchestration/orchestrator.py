@@ -18,8 +18,8 @@ ACCOUNT_URL  = os.getenv("ACCOUNT_SERVICE_URL",  "http://localhost:8001")
 RISK_URL     = os.getenv("RISK_SERVICE_URL",      "http://localhost:8002")
 CLEARING_URL = os.getenv("CLEARING_SERVICE_URL",  "http://localhost:8003")
 
-DELAY_MIN = float(os.getenv("SAGA_STEP_DELAY_MIN", 2))
-DELAY_MAX = float(os.getenv("SAGA_STEP_DELAY_MAX", 4))
+DELAY_MIN = float(os.getenv("SAGA_STEP_DELAY_MIN", 1))
+DELAY_MAX = float(os.getenv("SAGA_STEP_DELAY_MAX", 2))
 
 
 async def _step_delay():
@@ -67,8 +67,8 @@ async def run_transfer_saga(
         if notify:
             await notify({"transfer_id": transfer_id, **entry})
 
-    async def call(method: str, url: str, payload: dict) -> dict:
-        async with httpx.AsyncClient(timeout=10.0) as client:
+    async def call(method: str, url: str, payload: dict, timeout: float = 30.0) -> dict:
+        async with httpx.AsyncClient(timeout=timeout) as client:
             resp = await client.request(method, url, json=payload)
             resp.raise_for_status()
             return resp.json()

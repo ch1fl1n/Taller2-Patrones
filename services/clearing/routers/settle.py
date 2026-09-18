@@ -19,12 +19,8 @@ async def settle(req: SettleRequest):
 
     # Simular timeout / caída de red (CP-04)
     if req.force_timeout:
-        await asyncio.sleep(1)  # pequeño delay antes de fallar
         await log_step(req.transfer_id, req.saga_mode, "CLEARING_SETTLE", "FAILED", {"reason": "NETWORK_TIMEOUT"})
         raise HTTPException(status_code=504, detail={"error": "NETWORK_TIMEOUT", "message": "External interbank network timed out"})
-
-    # Simular demora de liquidación externa (observable en la UI)
-    await asyncio.sleep(1)
 
     external_ref = f"CLR-{uuid.uuid4().hex[:8].upper()}"
 
