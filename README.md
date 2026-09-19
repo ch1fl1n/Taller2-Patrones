@@ -4,6 +4,8 @@
 
 
 Daniel David Gómez Britto 
+
+
 Juan Camilo Silva Velasco 
 
 > **Módulo:** Arquitectura de Software Distribuida & Sistemas Transaccionales  
