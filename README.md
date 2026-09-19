@@ -1,5 +1,11 @@
 # 🏦 NovaBank International — Taller Patrón Saga Distribuido
 
+
+
+
+Daniel David Gómez Britto 
+Juan Camilo Silva Velasco 
+
 > **Módulo:** Arquitectura de Software Distribuida & Sistemas Transaccionales  
 > **Stack:** 100% Local · Python/FastAPI · React · Supabase (PostgreSQL local) · Redis · Prefect v2
 
